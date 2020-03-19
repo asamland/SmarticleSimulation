@@ -68,7 +68,8 @@ for iter in range(runs):
                                 p.JOINT_FIXED,[0,0,0],[0,0,0],[0,0,z])
     for s in smarticles:
         s.reset_pose()
-    for i in range (240*1):
+    #for i in range (240*1):
+    for i in range(1):
         p.stepSimulation()
         for s in smarticles:
             if i%dt==s.gait_phase:
@@ -87,7 +88,8 @@ for iter in range(runs):
             fl.ray_check(smarticles)
         for s in smarticles:
             if i%dt==s.gait_phase:
-                s.motor_step()
+                #s.motor_step()
+                s.move_random_corners()
     p.removeAllUserDebugItems()
     pos, _ = p.getBasePositionAndOrientation(r)
     displacement.append(pos[:2])
