@@ -28,7 +28,7 @@ R = [-1.7,1.7,1.7,-1.7]
 L = [1.7,1.7,-1.7,-1.7]
 dt = sim.time_to_steps(0.45)
 
-smarticles = sim.load_smarticles(n,smarticle_path, maxvel, dx,th,[L,R],dt,z)
+smarticles = sim.load_smarticles(n,smarticle_path,[L,R],dt,z, dx,th)
 r = p.loadURDF(ring_path, basePosition = [0,0,z])
 
 for i in range (2*480):
