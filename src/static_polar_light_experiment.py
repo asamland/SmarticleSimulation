@@ -88,8 +88,8 @@ for iter in range(runs):
             fl.ray_check(smarticles)
         for s in smarticles:
             if i%dt==s.gait_phase:
-                #s.motor_step()
-                s.move_random_corners()
+                s.motor_step()
+                #s.move_random_corners()
     p.removeAllUserDebugItems()
     pos, _ = p.getBasePositionAndOrientation(r)
     displacement.append(pos[:2])
