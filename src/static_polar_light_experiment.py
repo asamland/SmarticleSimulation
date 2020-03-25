@@ -29,7 +29,7 @@ flashlight_path = urdf_dir+'flashlight.urdf'
 
 server = p.GUI if GUI else p.DIRECT
 physicsClient = p.connect(server)#or p.DIRECT for non-graphical version
-runs = 10
+runs = 20
 total_displacement = np.zeros(runs)
 z = 0.6
 fl = Flashlight(flashlight_path,[0,1,z+0.025], 3*np.pi/2)
