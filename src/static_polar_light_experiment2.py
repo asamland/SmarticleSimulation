@@ -31,10 +31,16 @@ def init_axes():
 
 
 def draw_rectangle(ax,xy, th, color):
+    th = np.mod(th+np.pi/2,2*np.pi)
     width = 54
     height = 30
+    x_axis = np.array([np.cos(th),np.sin(th)])
+    y_axis = np.array([-np.sin(th),np.cos(th)])
+    xy = xy+ -width/2*x_axis+ -height/2.*y_axis
+    alpha = 0.002
+    alpha = 0.3
     rect_c =(0.749,0.624,1)
-    ang= 90+180/np.pi*th
+    ang= 180/np.pi*th
     ax.add_patch(Rectangle(xy=xy ,width=width, height=height, angle = ang,\
                                 linewidth=0, color=color, alpha=0.002))
     # plt.pause(0.0001)
@@ -50,7 +56,7 @@ table_path = urdf_dir+'table/table.urdf'
 flashlight_path = urdf_dir+'flashlight.urdf'
 
 key_fun = lambda x: x[0]
-c = ('red','yellow','blue','white')
+c = ('red','green','blue','white')
 
 
 
@@ -114,13 +120,13 @@ for iter in range(runs):
                         state[:2]=1000*(s.x[:2]-ring_center)
                         state[2] = s.x[2]
                         states.append(state)
-                    if len(states)==1:
-                        state = states[0]
-                        draw_rectangle(ax, state[:2], state[2],c[0])
-                    elif len(states)>1 and len(states)<4:
-                        states.sort(key=key_fun)
-                        for c_ii, state in enumerate(states):
-                            draw_rectangle(ax, state[:2], state[2],c[c_ii+1])
+                if len(states)==1:
+                    state = states[0]
+                    draw_rectangle(ax, state[:2], state[2],c[0])
+                elif len(states)>1 and len(states)<4:
+                    states.sort(key=key_fun)
+                    for c_ii, state in enumerate(states):
+                        draw_rectangle(ax, state[:2], state[2],c[c_ii+1])
 
             plot_ii+=1
         for s in smarticles:
