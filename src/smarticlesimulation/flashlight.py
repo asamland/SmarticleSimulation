@@ -9,8 +9,8 @@ class Flashlight(object):
     def __init__(self,urdf_path, basePosition, yaw=0, beam_width=np.pi/14,\
                 ray_count=90, ray_length=1.2, debug=0):
         self.debug = debug
-        self.polar = np.zeros(2)
         self.x = np.array(basePosition).astype(np.double)
+        self.polar = np.array(self.x2polar(*self.x[:2]))
         self.yaw = np.mod(yaw,2*np.pi)
         self.beam_width = beam_width
         self.ray_len = ray_length
@@ -28,6 +28,13 @@ class Flashlight(object):
     def polar2x(r, theta):
         z = r * np.exp(1j*theta)
         return np.array([np.real(z),np.imag(z)])
+
+    @staticmethod
+    def x2polar(x,y):
+        r = np.sqrt(x**2+y**2)
+        theta = np.mod(np.arctan2(y,x),2*np.pi)
+        return r, theta
+
 
     def set_position(self,x, yaw=None):
         self.x = np.array(x)
