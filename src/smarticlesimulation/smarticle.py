@@ -53,6 +53,9 @@ class Smarticle(object):
         self.update_position()
 
     def reset_pose(self, pos=None, orn=None, joint_state=None):
+        '''
+        reset smarticles to initial positions
+        '''
         if pos == None:
             pos = self.initial_pos
         if orn == None:
@@ -65,7 +68,9 @@ class Smarticle(object):
         self.update_position()
 
     def load_gait(self, gait, gait_dt):
-        '''DOC'''
+        '''
+        load gait of [gaitL, gaitR], where gaitL and gaitR are lists for smarticles to execute
+        '''
         self.n = gait.shape[1]
         self.gait_index = np.random.randint(0,self.n)
         self.gait_period = gait_dt
@@ -74,6 +79,9 @@ class Smarticle(object):
         self.gaitR = gait[1]
 
     def move_arms(self,posL, posR):
+        '''
+        move arms to specified angles
+        '''
         p.setJointMotorControl2(self.id,0, self.control,\
             targetPosition=posL+self.arm_offset[0],\
             maxVelocity = self.maxvel[0],\
@@ -84,11 +92,17 @@ class Smarticle(object):
             force = self.MAX_FORCE)
 
     def move_random_corners(self):
+        '''
+        move arms to random corners
+        '''
         posL = np.random.choice([-1.7,1.7])
         posR = np.random.choice([-1.7,1.7])
         self.move_arms(posL, posR)
 
     def set_plank(self, state):
+        '''
+        enable/disable plank state of smarticles
+        '''
         if state==1:
             self.plank = 1
             self.move_arms(0,0)
@@ -100,17 +114,22 @@ class Smarticle(object):
                 p.changeVisualShape(self.id,-1,rgbaColor=[0.3,0.3,0.3,1])
 
     def motor_step(self):
-        if self.plank !=1:
+        '''
+        execute next step in gait
+        '''
+        if self.plank ==0:
             posL = self.gaitL[self.gait_index]
             posR = self.gaitR[self.gait_index]
+            self.move_arms(posL, posR)
         else:
             posL = self.arm_offset[0]
             posR = self.arm_offset[1]
-        if self.plank==0:
-            self.move_arms(posL, posR)
         self.gait_index = (self.gait_index+1)%self.n
 
     def update_position(self):
+        '''
+        update position of smarticles
+        '''
         pos, orient = p.getBasePositionAndOrientation(self.id)
         self.x[0:2]=np.array(pos[0:2])
         self.x[2]=np.mod(p.getEulerFromQuaternion(orient)[2],2*np.pi)
@@ -119,6 +138,9 @@ class Smarticle(object):
                                                      self.PR_LOC[ii], [0,0,0,1])
 
     def light_plank(self,ray, light_yaw):
+        '''
+        check if light rays hit photoresistor positions on smarticles
+        '''
         ray = np.array(ray)
         if self.plank ==1:
             return False
@@ -133,3 +155,5 @@ class Smarticle(object):
 
                 self.set_plank(1)
                 return True
+            else:
+                return False

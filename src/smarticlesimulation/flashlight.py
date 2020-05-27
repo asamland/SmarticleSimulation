@@ -37,6 +37,9 @@ class Flashlight(object):
 
 
     def set_position(self,x, yaw=None):
+        '''
+        set position of flashlight using x - [x y z] and yaw or angle in the 2d plane
+        '''
         self.x = np.array(x)
         self.ray_from = self.x*np.ones([self.ray_count,1])
         if yaw is not None:
@@ -46,6 +49,9 @@ class Flashlight(object):
 
 
     def set_polar_position(self,origin, r=None,th=None, z = None):
+        '''
+        set position of flashlight using polar coordinates
+        '''
         if r is not None:
             self.polar[0] = r
         if th is not None:
@@ -58,6 +64,9 @@ class Flashlight(object):
 
 
     def draw_rays(self):
+        '''
+        draws rays to be visualized in sim
+        '''
         ray_to = np.zeros([self.ray_count,3])
         ray_ids = np.zeros(self.ray_count)
         ray_angles = np.mod(self.yaw+self.rays,2*np.pi)
@@ -70,6 +79,9 @@ class Flashlight(object):
         return p.rayTestBatch(self.ray_from, ray_to)
 
     def ray_check(self, smarticles):
+        '''
+        updates position of smarticles and checks if any are hit by the light rays
+        '''
         p.removeAllUserDebugItems()
         results = self.draw_rays()
         smart_ids = [x.id for x in smarticles]

@@ -9,7 +9,7 @@ smarticle_path = '../urdf/smarticle.urdf'
 ring_path = '../urdf/ring.urdf'
 flashlight_path = '../urdf/flashlight.urdf'
 
-
+# table height
 z = 0.6
 
 physicsClient = p.connect(p.GUI)#or p.DIRECT for non-graphical version
@@ -19,11 +19,15 @@ planeId = p.loadURDF("plane.urdf")
 tableId = p.loadURDF("../urdf/table/table.urdf")
 table_constraint_id = p.createConstraint(tableId,-1,0,-1,p.JOINT_FIXED,[0,0,0],[0,0,0],[0,0,0])
 
-
+# number of smarticles
 n = 5
+# max arm velocity
 maxvel = 6.9
+# placement spacing
 dx = 0.032
+# inital orientation
 th = np.pi/2
+# specify gait
 R = [-1.7,1.7,1.7,-1.7]
 L = [1.7,1.7,-1.7,-1.7]
 dt = sim.time_to_steps(0.45)
